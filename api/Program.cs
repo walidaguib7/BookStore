@@ -1,3 +1,6 @@
+using api.Config;
+using api.Hubs;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +10,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddServices();
+builder.Services.addDB(builder);
+builder.Services.addIdentity();
+builder.Services.addAuthentication(builder);
+builder.Services.AddValidations();
 
 var app = builder.Build();
 
@@ -18,9 +26,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+app.MapHub<NotificationsHub>("Notifications");
 
 app.Run();
