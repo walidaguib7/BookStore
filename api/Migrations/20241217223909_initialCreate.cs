@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,11 @@ namespace api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    First_name = table.Column<string>(type: "text", nullable: false),
+                    Last_Name = table.Column<string>(type: "text", nullable: false),
+                    Bio = table.Column<string>(type: "text", nullable: false),
+                    Gender = table.Column<string>(type: "text", nullable: false),
+                    Age = table.Column<int>(type: "integer", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -159,13 +164,33 @@ namespace api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EmailVerifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    code = table.Column<int>(type: "integer", nullable: false),
+                    userId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailVerifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmailVerifications_AspNetUsers_userId",
+                        column: x => x.userId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "8ee06f05-c4ea-407b-80fc-e4284a2300af", null, "user", "USER" },
-                    { "94464dfb-10e4-457a-9918-1efe14c1de28", null, "admin", "ADMIN" }
+                    { "6a5dde69-c9c1-4c60-acff-0d65c0c70298", null, "customer", "CUSTOMER" },
+                    { "94d6ff70-5397-4093-9cd5-01750c568255", null, "admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -204,6 +229,11 @@ namespace api.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmailVerifications_userId",
+                table: "EmailVerifications",
+                column: "userId");
         }
 
         /// <inheritdoc />
@@ -223,6 +253,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "EmailVerifications");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

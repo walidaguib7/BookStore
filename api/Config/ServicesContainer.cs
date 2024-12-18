@@ -22,12 +22,14 @@ namespace api.Config
         {
             services.AddTransient<ITokens, TokenRepo>();
             services.AddScoped<IUser, UserRepo>();
+            services.AddScoped<IEmailVerification, EmailVerificationsRepo>();
         }
 
         public static void AddValidations(this IServiceCollection services)
         {
             services.AddKeyedScoped<IValidator<RegisterDto>, RegisterValidation>("register");
             services.AddKeyedScoped<IValidator<LoginDto>, LoginValidation>("login");
+            services.AddKeyedScoped<IValidator<UpdateUserDto>, UpdateUserValidation>("updateUser");
         }
 
         public static void addDB(this IServiceCollection services, WebApplicationBuilder builder)
@@ -42,10 +44,9 @@ namespace api.Config
         {
             services.AddIdentity<User, IdentityRole>(options =>
             {
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequiredLength = 12;
                 options.User.RequireUniqueEmail = true;
+                options.Password.RequireUppercase = false;           // Uppercase is not required
+                options.Password.RequireLowercase = true;
             }).AddEntityFrameworkStores<AppDBContext>().AddDefaultTokenProviders();
         }
 
@@ -77,6 +78,12 @@ namespace api.Config
 
                };
            }); ;
+        }
+
+        public static void AddMailing(this IServiceCollection services, WebApplicationBuilder builder)
+        {
+            var smtpSettings = builder.Configuration.GetSection("Smtp");
+            services.AddSingleton(smtpSettings);
         }
     }
 }

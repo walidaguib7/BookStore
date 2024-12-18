@@ -8,6 +8,8 @@ namespace api.Data
 {
     public class AppDBContext(DbContextOptions options) : IdentityDbContext<User>(options)
     {
+
+        public DbSet<EmailVerification> EmailVerifications { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

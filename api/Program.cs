@@ -15,6 +15,7 @@ builder.Services.addDB(builder);
 builder.Services.addIdentity();
 builder.Services.addAuthentication(builder);
 builder.Services.AddValidations();
+builder.Services.AddMailing(builder);
 
 var app = builder.Build();
 

@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20241217190154_initial")]
-    partial class initial
+    [Migration("20241217223909_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,15 +53,15 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "94464dfb-10e4-457a-9918-1efe14c1de28",
+                            Id = "94d6ff70-5397-4093-9cd5-01750c568255",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "8ee06f05-c4ea-407b-80fc-e4284a2300af",
-                            Name = "user",
-                            NormalizedName = "USER"
+                            Id = "6a5dde69-c9c1-4c60-acff-0d65c0c70298",
+                            Name = "customer",
+                            NormalizedName = "CUSTOMER"
                         });
                 });
 
@@ -171,6 +171,28 @@ namespace api.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("api.models.EmailVerification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("code")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("userId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("EmailVerifications");
+                });
+
             modelBuilder.Entity("api.models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -178,6 +200,13 @@ namespace api.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -189,6 +218,18 @@ namespace api.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("First_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Last_Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -284,6 +325,17 @@ namespace api.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("api.models.EmailVerification", b =>
+                {
+                    b.HasOne("api.models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
                 });
 #pragma warning restore 612, 618
         }

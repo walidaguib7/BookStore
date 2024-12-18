@@ -201,3 +201,8 @@ d:\asp.net core apps\bookStore\tests\obj\Debug\net8.0\refint\tests.dll
 d:\asp.net core apps\bookStore\tests\obj\Debug\net8.0\tests.pdb
 d:\asp.net core apps\bookStore\tests\obj\Debug\net8.0\tests.genruntimeconfig.cache
 d:\asp.net core apps\bookStore\tests\obj\Debug\net8.0\ref\tests.dll
+d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\MailKit.dll
+d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\MimeKit.dll
+d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll

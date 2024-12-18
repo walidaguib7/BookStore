@@ -10,6 +10,7 @@ namespace api.Hubs
     {
         public override Task OnConnectedAsync()
         {
+            Console.WriteLine(Context.ConnectionId);
             return base.OnConnectedAsync();
         }
 
