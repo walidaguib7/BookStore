@@ -206,3 +206,5 @@ d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\MailKit.dll
 d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\MimeKit.dll
 d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
 d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\Castle.Core.dll
+d:\asp.net core apps\bookStore\tests\bin\Debug\net8.0\FakeItEasy.dll

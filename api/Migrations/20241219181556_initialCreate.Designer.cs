@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20241218202254_updateDB")]
-    partial class updateDB
+    [Migration("20241219181556_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,13 +53,13 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "89739a55-0793-4988-a040-4d642259a966",
+                            Id = "e2b6c08d-d899-4e2e-90f3-55e7f3120bfe",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "416bc3a5-ecbc-4ce5-b82e-166e790d4944",
+                            Id = "830c97d9-0f70-4521-b9e9-ad7e81946cb0",
                             Name = "customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -270,6 +270,38 @@ namespace api.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("api.models.authors.Author", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Biography")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly>("Date_of_birth")
+                        .HasColumnType("date");
+
+                    b.Property<string>("First_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Last_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("authors");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

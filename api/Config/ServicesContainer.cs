@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.models;
+using api.models.authors.dtos;
+using api.models.authors.validations;
 using api.models.users.dtos;
 using api.models.users.validations;
 using api.Repositories;
@@ -13,6 +15,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 namespace api.Config
 {
@@ -20,9 +24,12 @@ namespace api.Config
     {
         public static void AddServices(this IServiceCollection services)
         {
+            services.AddScoped<ICache, CachingRepo>();
             services.AddTransient<ITokens, TokenRepo>();
             services.AddScoped<IUser, UserRepo>();
             services.AddScoped<IEmailVerification, EmailVerificationsRepo>();
+            services.AddScoped<IAuthor, AuthorRepo>();
+            services.AddScoped<ICache, CachingRepo>();
         }
 
         public static void AddValidations(this IServiceCollection services)
@@ -30,6 +37,9 @@ namespace api.Config
             services.AddKeyedScoped<IValidator<RegisterDto>, RegisterValidation>("register");
             services.AddKeyedScoped<IValidator<LoginDto>, LoginValidation>("login");
             services.AddKeyedScoped<IValidator<UpdateUserDto>, UpdateUserValidation>("updateUser");
+            // author validations
+            services.AddKeyedScoped<IValidator<CreateAuthorDto>, CreateAuthorValidation>("createAuthor");
+            services.AddKeyedScoped<IValidator<UpdateAuthorDto>, UpdateAuthorValidation>("updateAuthor");
         }
 
         public static void addDB(this IServiceCollection services, WebApplicationBuilder builder)
@@ -84,6 +94,46 @@ namespace api.Config
         {
             var smtpSettings = builder.Configuration.GetSection("Smtp");
             services.AddSingleton(smtpSettings);
+        }
+
+        public static void AddSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(option =>
+        {
+            option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter a valid token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+            option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+        });
+        }
+
+        public static void AddRedis(this IServiceCollection services, WebApplicationBuilder builder)
+        {
+            services.AddSingleton<IConnectionMultiplexer>
+            (
+                x => ConnectionMultiplexer.Connect(builder.Configuration.GetValue<string>("RedisConnectionString"))
+            )
+            ;
         }
     }
 }

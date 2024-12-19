@@ -16,6 +16,8 @@ builder.Services.addIdentity();
 builder.Services.addAuthentication(builder);
 builder.Services.AddValidations();
 builder.Services.AddMailing(builder);
+builder.Services.AddSwagger();
+builder.Services.AddRedis(builder);
 
 var app = builder.Build();
 

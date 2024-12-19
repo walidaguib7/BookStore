@@ -33,11 +33,11 @@ namespace api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    First_name = table.Column<string>(type: "text", nullable: false),
-                    Last_Name = table.Column<string>(type: "text", nullable: false),
-                    Bio = table.Column<string>(type: "text", nullable: false),
-                    Gender = table.Column<string>(type: "text", nullable: false),
-                    Age = table.Column<int>(type: "integer", nullable: false),
+                    First_name = table.Column<string>(type: "text", nullable: true),
+                    Last_Name = table.Column<string>(type: "text", nullable: true),
+                    Bio = table.Column<string>(type: "text", nullable: true),
+                    Gender = table.Column<string>(type: "text", nullable: true),
+                    Age = table.Column<int>(type: "integer", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -56,6 +56,23 @@ namespace api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "authors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    First_name = table.Column<string>(type: "text", nullable: false),
+                    Last_name = table.Column<string>(type: "text", nullable: false),
+                    Biography = table.Column<string>(type: "text", nullable: false),
+                    Date_of_birth = table.Column<DateOnly>(type: "date", nullable: false),
+                    Country = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_authors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -189,8 +206,8 @@ namespace api.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6a5dde69-c9c1-4c60-acff-0d65c0c70298", null, "customer", "CUSTOMER" },
-                    { "94d6ff70-5397-4093-9cd5-01750c568255", null, "admin", "ADMIN" }
+                    { "830c97d9-0f70-4521-b9e9-ad7e81946cb0", null, "customer", "CUSTOMER" },
+                    { "e2b6c08d-d899-4e2e-90f3-55e7f3120bfe", null, "admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -253,6 +270,9 @@ namespace api.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "authors");
 
             migrationBuilder.DropTable(
                 name: "EmailVerifications");
