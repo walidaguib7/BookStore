@@ -68,7 +68,8 @@ namespace api.Repositories
 
         public async Task<User?> getUser(string userId)
         {
-            User? user = await context.Users.Where(u => u.Id == userId).FirstAsync();
+            User? user = await context.Users
+            .Include(u => u.media).Where(u => u.Id == userId).FirstAsync();
             if (user == null) return null;
             return user;
         }
@@ -183,6 +184,7 @@ namespace api.Repositories
                 user.Bio = dto.Bio;
                 user.Gender = dto.Gender;
                 user.Age = dto.Age;
+                user.mediaId = dto.fileId;
                 await context.SaveChangesAsync();
                 return user;
             }

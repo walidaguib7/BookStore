@@ -18,7 +18,9 @@ namespace api.models.users.Mapping
                 Username = model.UserName,
                 Age = model.Age,
                 Bio = model.Bio,
-                Gender = model.Gender
+                Gender = model.Gender,
+                fileId = model.mediaId,
+                Profile_Picture = model.media?.Path
             };
         }
     }

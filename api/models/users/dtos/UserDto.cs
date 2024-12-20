@@ -15,5 +15,7 @@ namespace api.models.users.dtos
         public string? Bio { get; set; }
         public string? Gender { get; set; }
         public int? Age { get; set; }
+        public int? fileId { get; set; }
+        public string? Profile_Picture { get; set; }
     }
 }

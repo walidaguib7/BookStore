@@ -34,7 +34,7 @@ namespace api.Controllers
             {
                 var result = await usersService.Register(dto);
                 if (result == null) return NotFound();
-                return Ok(result);
+                return Created();
             }
             catch (ValidationException e)
             {

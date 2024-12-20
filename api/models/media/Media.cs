@@ -10,5 +10,6 @@ namespace api.models.media
         public int Id { get; set; }
         public string Path { get; set; }
         public string Type { get; set; }
+        public User? user { get; set; }
     }
 }

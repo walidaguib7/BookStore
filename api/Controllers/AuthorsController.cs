@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using api.models.authors.dtos;
 using api.models.authors.mapping;
 using api.Services;
+using api.utils;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
@@ -40,8 +43,20 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAuthor([FromBody] CreateAuthorDto dto)
         {
-            var author = await authorsService.CreateAuthor(dto);
-            return Created();
+            try
+            {
+                var author = await authorsService.CreateAuthor(dto);
+                return Created();
+            }
+            catch (ValidationException e)
+            {
+
+                return BadRequest(new ValidationErrorResponse { Errors = e.Errors.Select(e => e.ErrorMessage) });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         [HttpDelete]
@@ -57,9 +72,22 @@ namespace api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> UpdateAuthor([FromRoute] int id, [FromBody] UpdateAuthorDto dto)
         {
-            var author = await authorsService.UpdateAuthor(id, dto);
-            if (author == null) return NotFound();
-            return Ok($"Author - {author.First_name} {author.Last_name} has been updated!");
+
+            try
+            {
+                var author = await authorsService.UpdateAuthor(id, dto);
+                if (author == null) return NotFound();
+                return Ok($"Author - {author.First_name} {author.Last_name} has been updated!");
+            }
+            catch (ValidationException e)
+            {
+
+                return BadRequest(new ValidationErrorResponse { Errors = e.Errors.Select(e => e.ErrorMessage) });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }
