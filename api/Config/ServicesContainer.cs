@@ -6,6 +6,8 @@ using api.Data;
 using api.models;
 using api.models.authors.dtos;
 using api.models.authors.validations;
+using api.models.media.dtos;
+using api.models.media.validations;
 using api.models.users.dtos;
 using api.models.users.validations;
 using api.Repositories;
@@ -30,6 +32,7 @@ namespace api.Config
             services.AddScoped<IEmailVerification, EmailVerificationsRepo>();
             services.AddScoped<IAuthor, AuthorRepo>();
             services.AddScoped<ICache, CachingRepo>();
+            services.AddScoped<IMedia, MediaRepo>();
         }
 
         public static void AddValidations(this IServiceCollection services)
@@ -40,6 +43,8 @@ namespace api.Config
             // author validations
             services.AddKeyedScoped<IValidator<CreateAuthorDto>, CreateAuthorValidation>("createAuthor");
             services.AddKeyedScoped<IValidator<UpdateAuthorDto>, UpdateAuthorValidation>("updateAuthor");
+            //media validations
+            services.AddKeyedScoped<IValidator<CreateFileDto>, CreateFileValidation>("createFile");
         }
 
         public static void addDB(this IServiceCollection services, WebApplicationBuilder builder)
